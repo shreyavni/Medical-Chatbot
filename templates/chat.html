@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Chatbot</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}" />
+</head>
+
+<body>
+    <div class="app-shell">
+        <div class="scene-layer"></div>
+        <div class="scene-layer scene-layer--soft"></div>
+
+        <div class="container-fluid h-100">
+            <div class="row justify-content-center h-100 align-items-center">
+                <div class="col-xl-6 col-lg-7 col-md-10 col-sm-12 py-4">
+
+                    <div class="chat-card shadow-lg">
+                        <div class="chat-header">
+                            <div class="brand-block">
+                                <div class="brand-icon">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
+                                <div>
+                                    <h1>Medical Chatbot</h1>
+                                    <p>Ask health questions, get thoughtful answers.</p>
+                                </div>
+                            </div>
+                            <div class="status-pill">
+                                <span class="status-dot"></span>
+                                Online
+                            </div>
+                        </div>
+
+                        <div id="messageFormeight" class="chat-body">
+                            <div class="message-row message-row--incoming fade-in-up">
+                                <div class="chat-avatar bot-avatar"><i class="fas fa-robot"></i></div>
+                                <div class="message-bubble message-bubble--bot">
+                                    <span>Hello! I am your virtual medical assistant. How can I help you today?</span>
+                                    <div class="message-meta"><small>Now</small></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chat-footer">
+                            <form id="messageArea" class="message-form">
+                                <div class="message-input-wrap">
+                                    <input type="text" id="text" name="msg" placeholder="Type your message..."
+                                        autocomplete="off" class="form-control type_msg" required />
+                                </div>
+                                <button type="submit" id="send" class="send_btn">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            function formatTime(date) {
+                const hour = String(date.getHours()).padStart(2, '0');
+                const minute = String(date.getMinutes()).padStart(2, '0');
+                return `${hour}:${minute}`;
+            }
+
+            $("#messageArea").on("submit", function (event) {
+                event.preventDefault();
+                const rawText = $("#text").val().trim();
+                if (!rawText) return;
+
+                const str_time = formatTime(new Date());
+
+                // Added User Avatar to outgoing messages
+                const userHtml = `
+                    <div class="message-row message-row--outgoing fade-in-up">
+                        <div class="message-bubble message-bubble--user">
+                            <span>${rawText}</span>
+                            <div class="message-meta"><small>${str_time}</small></div>
+                        </div>
+                        <div class="chat-avatar user-avatar"><i class="fas fa-user"></i></div>
+                    </div>`;
+
+                $("#text").val("");
+                $("#messageFormeight").append(userHtml);
+                $("#messageFormeight").scrollTop($("#messageFormeight")[0].scrollHeight);
+
+                // Simulated AJAX call (Replace with your actual endpoint logic if needed)
+                $.ajax({
+                    data: { msg: rawText },
+                    type: "POST",
+                    url: "/get",
+                }).done(function (data) {
+
+                    // Added Bot Avatar to incoming messages
+                    const botHtml = `
+                        <div class="message-row message-row--incoming fade-in-up">
+                            <div class="chat-avatar bot-avatar"><i class="fas fa-robot"></i></div>
+                            <div class="message-bubble message-bubble--bot">
+                                <span>${data}</span>
+                                <div class="message-meta"><small>${str_time}</small></div>
+                            </div>
+                        </div>`;
+
+                    $("#messageFormeight").append(botHtml);
+                    $("#messageFormeight").scrollTop($("#messageFormeight")[0].scrollHeight);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
