@@ -1,20 +1,39 @@
-# Medical-Chatbot
+# Medical-Chatbot : 🩺 AI-Powered Medical Chatbot
 
-## How to run?
+An intelligent, conversational medical assistant built using Large Language Models (LLMs) and Retrieval-Augmented Generation (RAG). This chatbot processes medical documents, generates vector embeddings, and retrieves highly relevant context to answer user queries accurately. 
+
+Designed with a lightweight Flask backend and optimized for cloud deployment.
+
+## 🚀 Tech Stack
+
+* **Framework:** Flask, Gunicorn (Production Server)
+* **AI & Orchestration:** LangChain (Core, Community, Pinecone, Groq integrations)
+* **Vector Database:** Pinecone
+* **Embeddings:** HuggingFace `sentence-transformers`
+* **Document Processing:** `pypdf`, LangChain Text Splitters
+* **Language:** Python 3.11
+
+## ✨ Features
+
+* **Retrieval-Augmented Generation (RAG):** Grounds LLM responses in factual medical data to reduce hallucinations.
+* **Semantic Search:** Uses Pinecone vector database for lightning-fast, highly relevant context retrieval.
+* **Document Ingestion:** Automatically parses and splits complex medical PDFs into digestible chunks for embedding.
+* **Production-Ready:** Configured with Gunicorn and optimized dependency resolution for seamless deployment on platforms like Render.
+
+## 🛠️ Local Setup
+
 ### STEPS:
-
 Clone the repository
 
 ```bash
 git clone https://github.com/shreyavni/Medical-Chatbot.git
 ```
-### STEP 01. Create the virtual environment and activate the environment
 
+
+### STEP 01. Create the virtual environment and activate the environment
 ```bash
 python -m venv medibot
-
 source medibot/Scripts/activate
-
 ```
 
 
@@ -24,106 +43,31 @@ pip install -r requirements.txt
 ```
 
 
-### Create a `.env` file in the root directory and add your Pinecone & openai credentials as follows:
-
+### STEP 03- Create a `.env` file in the root directory and add your Pinecone & openai credentials as follows:
 ```bash
 PINECONE_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 OPENAI_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ```
 
 
+### STEP 04- Run the application
 ```bash
-# run the following command to store embeddings to pinecone
-python store_index.py
-```
-
-```bash
-# Finally run the following command
 python app.py
 ```
 
-Now,
-```bash
-open up localhost:
-```
+*The app will be available at http://127.0.0.1:5000/*
 
+## 🌐 Deployment
+This project is fully configured for deployment on Render.
 
-### Techstack Used:
+1. Connect the repository to a new Render Web Service.
+2. Set the Environment to Python 3.
+3. Under Environment Variables, set PYTHON_VERSION to 3.11.0.
+4. Build Command: pip install -r requirements.txt
+5. Start Command: gunicorn app:app (Adjust app:app if your main file is named differently).
+6. Add your GROQ_API_KEY and PINECONE_API_KEY to Render's environment variables.
 
-- Python
-- LangChain
-- Flask
-- GPT
-- Pinecone
+## 🤝 Contributing
+Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
 
-
-
-## AWS-CICD-Deployment-with-Github-Actions
-
-## 1. Login to AWS console.
-
-## 2. Create IAM user for deployment
-
-	#with specific access
-
-	1. EC2 access : It is virtual machine
-
-	2. ECR: Elastic Container registry to save your docker image in aws
-
-
-	#Description: About the deployment
-
-	1. Build docker image of the source code
-
-	2. Push your docker image to ECR
-
-	3. Launch Your EC2 
-
-	4. Pull Your image from ECR in EC2
-
-	5. Lauch your docker image in EC2
-
-	#Policy:
-
-	1. AmazonEC2ContainerRegistryFullAccess
-
-	2. AmazonEC2FullAccess
-
-	
-## 3. Create ECR repo to store/save docker image
-    - Save the URI: 315865595366.dkr.ecr.us-east-1.amazonaws.com/medicalbot
-
-	
-## 4. Create EC2 machine (Ubuntu) 
-
-## 5. Open EC2 and Install docker in EC2 Machine:
-	
-	
-	#optinal
-
-	sudo apt-get update -y
-
-	sudo apt-get upgrade
-	
-	#required
-
-	curl -fsSL https://get.docker.com -o get-docker.sh
-
-	sudo sh get-docker.sh
-
-	sudo usermod -aG docker ubuntu
-
-	newgrp docker
-	
-## 6. Configure EC2 as self-hosted runner:
-    setting>actions>runner>new self hosted runner> choose os> then run command one by one
-
-
-## 7. Setup github secrets:
-
-   - AWS_ACCESS_KEY_ID
-   - AWS_SECRET_ACCESS_KEY
-   - AWS_DEFAULT_REGION
-   - ECR_REPO
-   - PINECONE_API_KEY
-   - OPENAI_API_KEY
+***Developed by Avni Shukla***
