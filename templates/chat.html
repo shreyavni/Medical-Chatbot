@@ -97,11 +97,25 @@
                 $("#messageFormeight").scrollTop($("#messageFormeight")[0].scrollHeight);
 
                 // Simulated AJAX call (Replace with your actual endpoint logic if needed)
+                const typingHtml = `
+                    <div class="message-row message-row--incoming fade-in-up typing-placeholder">
+                        <div class="chat-avatar bot-avatar"><i class="fas fa-robot"></i></div>
+                        <div class="message-bubble message-bubble--bot">
+                            <div class="typing-indicator">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </div>
+                    </div>`;
+
+                $("#messageFormeight").append(typingHtml);
+                $("#messageFormeight").scrollTop($("#messageFormeight")[0].scrollHeight);
+
                 $.ajax({
                     data: { msg: rawText },
                     type: "POST",
                     url: "/get",
                 }).done(function (data) {
+                    $(".typing-placeholder").remove();
 
                     // Added Bot Avatar to incoming messages
                     const botHtml = `
